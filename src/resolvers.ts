@@ -8,12 +8,20 @@ export const resolvers = {
     hello: () => "Hello, World!",
   },
   Mutation: {
-    register: async (_, { username, email, password }) => {
-      console.log(username, email, password);
+    register: async (_, values) => {
+      const newUser = new UserModel(values);
 
-      const newUser = new UserModel({ username, email, password });
+      let data = null;
 
-      newUser.save();
+      try {
+        const doc = (await newUser.save()).toObject();
+        const { _id, ...rest } = doc;
+        data = { ...rest, id: _id };
+      } catch (error) {
+        data = error;
+      }
+
+      return data;
     },
     login: async (_, { email, password }) => {},
   },
