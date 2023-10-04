@@ -3,9 +3,7 @@ import bcrypt from "bcrypt";
 
 import { users } from "./db.js";
 import { Book, User } from "./db/models.js";
-
-// Secret key for JWT
-const secretKey = "secret-key";
+import { SECRET_KEY } from "./utils/constants.js";
 
 export const resolvers = {
   Query: {
@@ -54,7 +52,7 @@ export const resolvers = {
           throw new Error("Invalid password");
         }
 
-        const token = jwt.sign({ userId: user._id }, secretKey, {
+        const token = jwt.sign({ userId: user._id }, SECRET_KEY, {
           expiresIn: "24h",
         });
 

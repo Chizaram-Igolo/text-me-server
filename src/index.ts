@@ -6,6 +6,7 @@ import { typeDefs } from "./graphqlSchema.js";
 import { resolvers } from "./resolvers.js";
 
 import { conn } from "./db/conn.js";
+import context from "./utils/context.js";
 
 /* DB connection status logging */
 conn.once("open", () => {
@@ -22,6 +23,9 @@ conn.on("error", (error) => {
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
-const { url } = await startStandaloneServer(server, { listen: { port: 4000 } });
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
+  context,
+});
 
 console.log(`Server ready at: ${url}`);
