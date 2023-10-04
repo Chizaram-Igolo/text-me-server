@@ -7,7 +7,6 @@ const getUser = async (token) => {
   try {
     if (token) {
       const user = jwt.verify(token.replace("Bearer ", ""), SECRET_KEY);
-      console.log("user verified", user);
       return user;
     }
     return null;
@@ -27,8 +26,6 @@ const context = async ({ req, res }) => {
   }
 
   const token = req.headers.authorization || "";
-
-  console.log("token", JSON.stringify(token));
 
   const user = await getUser(token);
 
