@@ -1,28 +1,80 @@
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
 import { users } from "./db.js";
-import { UserModel } from "./db/models.js";
+import { Book, User } from "./db/models.js";
+
+// Secret key for JWT
+const secretKey = "secret-key";
 
 export const resolvers = {
   Query: {
-    users: () => users,
-    getUser: async (_, { id }) => {},
-    hello: () => "Hello, World!",
+    users: async () => await User.find(),
+    user: async (_, { _id }) => await User.findById(_id),
+    books: async () => await Book.find(),
+    book: async (_, { _id }) => await Book.findById(_id),
   },
+
   Mutation: {
     register: async (_, values) => {
-      const newUser = new UserModel(values);
+      const { username, password, ...rest } = values;
 
-      let data = null;
+      let res = null;
 
       try {
-        const doc = (await newUser.save()).toObject();
-        const { _id, ...rest } = doc;
-        data = { ...rest, id: _id };
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+          throw new Error("Username already exists");
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = new User({ ...rest, username, password: hashedPassword });
+        await user.save();
+        res = user;
       } catch (error) {
-        data = error;
+        res = error;
       }
 
-      return data;
+      return res;
     },
-    login: async (_, { email, password }) => {},
+
+    login: async (_, { email, password }) => {
+      let res = null;
+
+      try {
+        const user = await User.findOne({ email });
+        console.log(user);
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+          throw new Error("Invalid password");
+        }
+
+        const token = jwt.sign({ userId: user._id }, secretKey, {
+          expiresIn: "24h",
+        });
+
+        res = { token, ...user.toObject() };
+        console.log(res);
+      } catch (error) {
+        res = error;
+      }
+
+      return res;
+    },
+
+    addBook: async (_, values) => {
+      const book = new Book(values);
+      await book.save();
+      return book;
+    },
+
+    updateBook: async (_, { id, ...update }) =>
+      await Book.findByIdAndUpdate(id, update, { new: true }),
+    deleteBook: async (_, { id }) => await Book.findByIdAndRemove(id),
   },
 };
