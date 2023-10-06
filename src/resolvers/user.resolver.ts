@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import { User } from "../db/models.js";
 import { SECRET_KEY } from "../utils/constants.js";
+
+import User from "../models/user.model.js";
 
 const userResolver = {
   Query: {

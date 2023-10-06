@@ -1,4 +1,4 @@
-import { Book } from "../db/models.js";
+import Book from "../models/book.model.js";
 
 const bookResolver = {
   Query: {
