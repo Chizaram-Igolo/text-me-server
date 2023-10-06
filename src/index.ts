@@ -3,10 +3,10 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 
 // Schema and resolver
 import { typeDefs } from "./graphqlSchema.js";
-import { resolvers } from "./resolvers.js";
 
 import { mongoInstance, conn } from "./db/conn.js";
 import context from "./utils/context.js";
+import resolvers from "./resolvers/index.resolver.js";
 
 // /* DB connection status logging */
 

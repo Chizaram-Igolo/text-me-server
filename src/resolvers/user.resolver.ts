@@ -1,15 +1,13 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import { Book, User } from "./db/models.js";
-import { SECRET_KEY } from "./utils/constants.js";
+import { User } from "../db/models.js";
+import { SECRET_KEY } from "../utils/constants.js";
 
-export const resolvers = {
+const userResolver = {
   Query: {
     users: async () => await User.find(),
     user: async (_, { _id }) => await User.findById(_id),
-    books: async () => await Book.find(),
-    book: async (_, { _id }) => await Book.findById(_id),
   },
 
   Mutation: {
@@ -61,15 +59,7 @@ export const resolvers = {
 
       return res;
     },
-
-    addBook: async (_, values) => {
-      const book = new Book(values);
-      await book.save();
-      return book;
-    },
-
-    updateBook: async (_, { id, ...update }) =>
-      await Book.findByIdAndUpdate(id, update, { new: true }),
-    deleteBook: async (_, { id }) => await Book.findByIdAndRemove(id),
   },
 };
+
+export default userResolver;
