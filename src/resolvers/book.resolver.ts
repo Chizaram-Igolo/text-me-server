@@ -7,14 +7,21 @@ const bookResolver = {
   },
 
   Mutation: {
-    addBook: async (_, values) => {
+    addBook: async (_, { input }) => {
+      const { ...values } = input;
       const book = new Book(values);
+      console.log("book", book);
       await book.save();
       return book;
     },
 
-    updateBook: async (_, { id, ...update }) =>
-      await Book.findByIdAndUpdate(id, update, { new: true }),
+    updateBook: async (_, { input }) => {
+      const { id, ...update } = input;
+      const book = (
+        await Book.findByIdAndUpdate(id, update, { new: true })
+      ).toObject();
+      return book;
+    },
     deleteBook: async (_, { id }) => await Book.findByIdAndRemove(id),
   },
 };

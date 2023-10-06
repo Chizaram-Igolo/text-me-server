@@ -18,17 +18,8 @@ const userSchema = `#graphql
   }
 
   type Mutation {
-    register(
-      firstname: String!
-      lastname: String! 
-      username: String! 
-      email: String! 
-      password: String!
-    ): User!
-    login(
-      email: String! 
-      password: String!
-    ): User!
+    register(input: RegisterInput!): User!
+    login(input: LoginInput!): User!
   }
 `;
 

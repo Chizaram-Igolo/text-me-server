@@ -13,14 +13,6 @@ const bookSchema = `#graphql
     description: String 
     publishedDate: String
   } 
-  
-  type Book {
-    _id: ID!
-    title: String!
-    author: String!
-    description: String!
-    publishedDate: String!
-  }
 
   type Query {
     books: [Book]!
@@ -28,18 +20,8 @@ const bookSchema = `#graphql
   }
 
   type Mutation {
-    addBook(
-      title: String!
-      author: String! 
-      description: String! 
-      publishedDate: String!
-    ): Book!
-    updateBook(
-      id: ID! 
-      title: String 
-      author: String 
-      description: String 
-      publishedDate: String): Book! 
+    addBook(input: AddBookInput!): Book!
+    updateBook(input: UpdateBookInput!): Book! 
     deleteBook(id: ID!): Book
   }
 `;
