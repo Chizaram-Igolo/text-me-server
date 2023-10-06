@@ -5,10 +5,11 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { typeDefs } from "./graphqlSchema.js";
 import { resolvers } from "./resolvers.js";
 
-import { conn } from "./db/conn.js";
+import { mongoInstance, conn } from "./db/conn.js";
 import context from "./utils/context.js";
 
-/* DB connection status logging */
+// /* DB connection status logging */
+
 conn.once("open", () => {
   console.log("Database is connected successfully");
 });
@@ -21,11 +22,13 @@ conn.on("error", (error) => {
   console.error("MongoDB connections error:", error);
 });
 
-const server = new ApolloServer({ typeDefs, resolvers });
+mongoInstance.then(async () => {
+  const server = new ApolloServer({ typeDefs, resolvers });
 
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
-  context,
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+    context: context,
+  });
+
+  console.log(`Server ready at: ${url}`);
 });
-
-console.log(`Server ready at: ${url}`);

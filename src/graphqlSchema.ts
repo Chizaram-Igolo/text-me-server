@@ -20,7 +20,7 @@ export const typeDefs = `#graphql
 
   type Mutation {
     register(firstname: String!, lastname: String!, username: String!, email: String!, password: String!): User
-    login(email: String!, password: String!): User 
+    login(email: String!, password: String!): User! 
     addBook(title: String!, author: String!, description: String!, publishedDate: String!): Book!
     updateBook(id: ID!, title: String, author: String, description: String, publishedDate: String): Book
     deleteBook(id: ID!): Book
@@ -28,9 +28,9 @@ export const typeDefs = `#graphql
 
   # Not optional
   type Query { 
-    users: [User] 
-    user(id: ID!): User 
+    users: [User!]!
+    user(id: ID!): User!
     books: [Book]!
-    book(id: ID!): Book
+    book(id: ID!): Book!
   }
 `;

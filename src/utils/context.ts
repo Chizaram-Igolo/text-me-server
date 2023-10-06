@@ -16,8 +16,6 @@ const getUser = async (token) => {
 };
 
 const context = async ({ req, res }) => {
-  console.log(req);
-
   if (
     req.body.operationName?.toLowerCase() === "register" ||
     req.body.operationName?.toLowerCase() === "login"

@@ -11,7 +11,7 @@ export const userSchema = new Schema({
 });
 
 export const bookSchema = new Schema({
-  title: { type: String, unique: true },
+  title: String,
   author: String,
   description: String,
   publishedDate: String,

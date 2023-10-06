@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import { users } from "./db.js";
 import { Book, User } from "./db/models.js";
 import { SECRET_KEY } from "./utils/constants.js";
 
@@ -42,7 +41,6 @@ export const resolvers = {
 
       try {
         const user = await User.findOne({ email });
-        console.log(user);
         if (!user) {
           throw new Error("User not found");
         }
@@ -57,7 +55,6 @@ export const resolvers = {
         });
 
         res = { token, ...user.toObject() };
-        console.log(res);
       } catch (error) {
         res = error;
       }
