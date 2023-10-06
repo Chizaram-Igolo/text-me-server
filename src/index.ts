@@ -1,12 +1,14 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
-// Schema and resolver
-import { typeDefs } from "./graphqlSchema.js";
+// Schemas and Resolvers
+import allTypeDefs from "./schemas/index.schema.js";
+import allResolvers from "./resolvers/index.resolver.js";
+
+// context
+import context from "./utils/context.js";
 
 import { mongoInstance, conn } from "./db/conn.js";
-import context from "./utils/context.js";
-import resolvers from "./resolvers/index.resolver.js";
 
 // /* DB connection status logging */
 
@@ -23,7 +25,10 @@ conn.on("error", (error) => {
 });
 
 mongoInstance.then(async () => {
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs: allTypeDefs,
+    resolvers: allResolvers,
+  });
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
