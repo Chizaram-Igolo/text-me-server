@@ -12,8 +12,8 @@ const userResolver = {
   },
 
   Mutation: {
-    register: async (_, values) => {
-      const { username, password, ...rest } = values;
+    register: async (_, { input }) => {
+      const { username, password, ...rest } = input;
 
       let res = null;
 
@@ -35,7 +35,9 @@ const userResolver = {
       return res;
     },
 
-    login: async (_, { email, password }) => {
+    login: async (_, { input }) => {
+      const { email, password } = input;
+
       let res = null;
 
       try {
